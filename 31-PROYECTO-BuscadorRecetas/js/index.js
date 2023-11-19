@@ -1,4 +1,4 @@
-import { loadCategories, showDishes } from './functions.js'
+import {clickHandler, loadCategories, showDishes} from './functions.js'
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCategories(categorySelect)
 
   categorySelect.addEventListener('change', (event) => {
-    showDishes(categorySelect.value) //Returns value of select field
+    showDishes(categorySelect.value)
+  })
+
+  document.addEventListener('click', (event) => {
+    clickHandler(event.target.id)
   })
 })
