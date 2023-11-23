@@ -1,27 +1,40 @@
-import { freeMealsAPI } from './db/FreeMealAPI.js'
+import { freeMealsAPI } from '../db/FreeMealAPI.js'
 import { showIngredients } from './ingredients.js'
-import { dishCardTemplate, dishInfoTemplate } from './templates/templates.js'
+import { dishCardTemplate, moreInfoTemplate } from '../templates/templates.js'
 
 
 //TODO: Think about extracting pre-exisitng HTML elements from functions
 //TODO: Figure out how to shift bootstrap from col-4 to col-3 when space is limited
-export async function showCards(category, result) {
+export const dishToCard = (dishes) => {
   try {
-    const dishes = await freeMealsAPI.getDishes(category)
+    const cards = []
+    console.log("dishToCard", dishes)
 
+    dishes.forEach((dish) => {
+      cards.add(createDishCard(dish))
+      checkFavourite(dish.idMeal)
+    })
+    return cards
+  } catch (error) {
+    console.error('Error fetching dishes:', error)
+  }
+}
+
+export const renderCards = (dishes, result) => {
+  try {
+    console.log("showCards", dishes)
     result.innerHTML = ""
 
     dishes.forEach((dish) => {
       result.appendChild(createDishCard(dish))
-      checkFavourite(dish.idMeal)
-    })
+      })
 
   } catch (error) {
     console.error('Error fetching dishes:', error)
   }
 }
 
-export async function showInfo(idMeal, result) {
+export const moreInfoCard = async (idMeal) => {
   const dish = await freeMealsAPI.getDishByID(idMeal)
   const ingredients = await showIngredients(dish);
   const card = document.createElement("div");
@@ -35,13 +48,11 @@ export async function showInfo(idMeal, result) {
     'p-4',
     'rounded'
   );
-
-  card.innerHTML = dishInfoTemplate(dish, ingredients)
-  result.innerHTML = ''
-  result.appendChild(card);
+  card.innerHTML = moreInfoTemplate(dish, ingredients)
+  return card
 }
 
-export function createDishCard(dish) {
+export const createDishCard = (dish) => {
   const card = document.createElement('div');
   card.classList.add('card', 'col-md-2', 'bg-light', 'm-1')
   card.id = `card-${dish.idMeal}`; // Adjusted padding here
@@ -50,7 +61,7 @@ export function createDishCard(dish) {
   return card;
 }
 
-export function checkFavourite(idMeal) {
+export const checkFavourite = (idMeal) => {
   const favourites = JSON.parse(localStorage.getItem('favourites')) || [];
   console.log(favourites)
 

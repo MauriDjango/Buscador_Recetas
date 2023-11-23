@@ -1,6 +1,6 @@
 
 
-export function dishInfoTemplate(dish, ingredients) {
+export function moreInfoTemplate(dish, ingredients) {
   return `
     <div class="d-flex align-items-center">
       <div class="mb-3 d-flex justify-content-start align-items-center w-50">

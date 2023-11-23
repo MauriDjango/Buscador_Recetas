@@ -1,4 +1,4 @@
-import { freeMealsAPI } from './db/FreeMealAPI.js'
+import { freeMealsAPI } from '../db/FreeMealAPI.js'
 
 export async function showIngredients(dish) {
   const ingredients = await freeMealsAPI.getIngredients(dish);
